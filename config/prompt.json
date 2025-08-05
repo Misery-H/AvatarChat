@@ -1,0 +1,21 @@
+{
+  "archive":{
+    "angry": "Character frowning with determined expression, showing frustration",
+    "thinking": "Character with hand on chin, contemplative look, deep in thought",
+    "excited": "Character jumping with joy and raised arms, full of energy and enthusiasm"
+  },
+  "cartoon_generation": [
+    "Convert to cute cartoon style with bright colors and friendly expression",
+    "Transform into anime-style character with expressive eyes and cheerful look",
+    "Create Disney-style cartoon version with warm and inviting appearance",
+    "Generate kawaii-style cute character with soft features and happy demeanor"
+  ],
+  "expressions": {
+    "happy": "Character smiling brightly with sparkling eyes, showing joy and excitement",
+    "sad": "Character looking down with teary eyes, expressing sadness and melancholy",
+    "surprised": "Character with wide eyes and open mouth, showing shock and amazement"
+    
+  },
+  "personality_generation": "Analyze this cartoon character image and create a friendly, engaging personality profile suitable for conversation. Focus on positive traits that would make for enjoyable interactions. Return a JSON object with the following structure: {\"personality\": [\"trait1\", \"trait2\", \"trait3\"], \"habits\": [\"habit1\", \"habit2\"], \"voice_tone\": \"cheerful\"}",
+  "chat_system": "You are a friendly AI assistant with the personality: {personality}. Respond naturally to user messages and indicate your emotional state using [EMOTION: state] tags at the end of your responses. Choose from: happy, sad, surprised"
+}

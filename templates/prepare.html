@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Avatar Chat - 准备阶段</title>
+    
+    <!-- CSS样式 -->
+    <link rel="stylesheet" href="/static/css/main.css">
+    <link rel="stylesheet" href="/static/css/prepare.css">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="/static/images/favicon.png">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>AI Avatar Chat</h1>
+            <p>几个简单步骤，创建您的专属AI头像助手</p>
+        </header>
+
+        <!-- 进度指示器 -->
+        <div class="progress-indicator">
+            <div class="progress-step current">1</div>
+            <div class="progress-step pending">2</div>
+            <div class="progress-step pending">3</div>
+        </div>
+
+        <!-- 步骤1: 图片上传 -->
+        <div class="card" id="step1">
+            <div class="step-title">步骤 1: 上传您的图片</div>
+            <div class="step-description">
+                上传一张清晰的人像照片，我们将把它转换为卡通头像。支持 JPEG、PNG、GIF 格式，文件大小不超过 10MB。
+            </div>
+            
+            <div class="upload-area" id="uploadArea">
+                <div class="upload-icon">📷</div>
+                <div class="upload-text">拖拽图片到这里或点击选择文件</div>
+                <div class="upload-hint">支持 JPEG、PNG、GIF 格式</div>
+                <input type="file" id="fileInput" accept="image/*" style="display: none;" aria-label="选择图片文件">
+            </div>
+            
+            <!-- 错误提示 -->
+            <div class="hidden" id="uploadError" role="alert"></div>
+            
+            <!-- 加载状态 -->
+            <div class="hidden" id="uploadLoading"></div>
+        </div>
+
+        <!-- 步骤2: 头像选择 -->
+        <div class="card hidden" id="step2">
+            <div class="step-title">步骤 2: 选择您的头像</div>
+            <div class="step-description">
+                从下面的卡通风格中选择您最喜欢的一个。您也可以使用数字键 1-4 快速选择。
+            </div>
+            
+            <!-- 头像网格 -->
+            <div class="avatar-grid" id="avatarGrid" role="group" aria-label="头像选项">
+                <!-- 头像选项将通过JavaScript动态添加 -->
+            </div>
+            
+            <!-- 错误提示 -->
+            <div class="hidden" id="avatarError" role="alert"></div>
+            
+            <!-- 加载状态 -->
+            <div class="hidden" id="avatarLoading"></div>
+            
+            <!-- 继续按钮 -->
+            <div class="continue-section">
+                <button class="btn btn-primary" id="selectAvatarBtn" disabled>
+                    <span class="btn-icon">✨</span>
+                    继续生成表情和个性
+                </button>
+            </div>
+        </div>
+
+        <!-- 帮助提示 -->
+        <div class="card" style="margin-top: 40px; background: rgba(255,255,255,0.95);">
+            <h3 style="color: #667eea; margin-bottom: 15px;">💡 使用提示</h3>
+            <ul style="color: #666; line-height: 1.8;">
+                <li><strong>最佳效果：</strong>使用正面、清晰、光线充足的人像照片</li>
+                <li><strong>键盘快捷键：</strong>使用数字键 1-4 快速选择头像</li>
+                <li><strong>取消操作：</strong>按 ESC 键返回上一步</li>
+                <li><strong>文件支持：</strong>JPEG、PNG、GIF 格式，最大 10MB</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="/static/js/common.js"></script>
+    <script src="/static/js/prepare.js"></script>
+    
+    <!-- 无障碍支持 -->
+    <script>
+        // 添加键盘导航支持
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Tab') {
+                // 确保焦点可见
+                document.body.classList.add('keyboard-navigation');
+            }
+        });
+        
+        document.addEventListener('mousedown', function() {
+            document.body.classList.remove('keyboard-navigation');
+        });
+    </script>
+    
+    <style>
+        /* 键盘导航时的焦点样式 */
+        .keyboard-navigation *:focus {
+            outline: 3px solid #667eea;
+            outline-offset: 2px;
+        }
+        
+        /* 错误消息样式增强 */
+        .error-message {
+            background: rgba(231, 76, 60, 0.1);
+            border: 1px solid #e74c3c;
+            color: #c0392b;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            animation: shake 0.5s ease-in-out;
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+        
+        /* 成功消息样式 */
+        .success-message {
+            background: rgba(46, 204, 113, 0.1);
+            border: 1px solid #2ecc71;
+            color: #27ae60;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            animation: fadeInUp 0.5s ease-out;
+        }
+        
+        /* 录音指示器样式 */
+        .recording-indicator {
+            align-self: flex-start;
+            background: rgba(231, 76, 60, 0.1);
+            border: 1px solid #e74c3c;
+            color: #c0392b;
+            padding: 15px 20px;
+            border-radius: 25px 25px 25px 8px;
+            font-weight: 500;
+            animation: pulse 1.5s infinite;
+        }
+    </style>
+</body>
+</html>

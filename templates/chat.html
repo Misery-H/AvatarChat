@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Avatar Chat - 聊天</title>
+    
+    <!-- CSS样式 -->
+    <link rel="stylesheet" href="/static/css/main.css">
+    <link rel="stylesheet" href="/static/css/chat.css">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="/static/images/favicon.png">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>AI Avatar Chat</h1>
+        </header>
+        
+        <div class="chat-layout">
+            <!-- 视频容器 -->
+            <div class="video-container">
+                <div class="video-wrapper">
+                    <video id="avatarVideo" autoplay muted loop playsinline>
+                        <!-- 视频源将通过JavaScript动态设置 -->
+                    </video>
+                    <div class="video-placeholder">
+                        <div style="text-align: center;">
+                            <div style="font-size: 4rem; margin-bottom: 15px;">🤖</div>
+                            <div>AI头像将在这里显示</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 聊天区域 -->
+            <div class="chat-area">
+                <!-- 聊天头部 -->
+                <div class="chat-header">
+                    <h2 class="chat-title">AI助手</h2>
+                    <div class="chat-subtitle">通过语音或文字与我交流</div>
+                    </div>
+                
+                <!-- 消息容器 -->
+                <div class="chat-messages" id="chatMessages" role="log" aria-live="polite" aria-label="聊天消息">
+                    <!-- 消息将通过JavaScript动态添加 -->
+                </div>
+                
+                <!-- 输入区域 -->
+                <div class="chat-input">
+                    <div class="input-group">
+                        <div class="input-wrapper">
+                            <textarea 
+                                class="message-input" 
+                                id="messageInput" 
+                                placeholder="输入您的消息..." 
+                                rows="1"
+                                aria-label="消息输入框"
+                                maxlength="1000"
+                            ></textarea>
+                        </div>
+                        <div class="input-actions">
+                            <button 
+                                class="btn btn-primary send-btn" 
+                                id="sendBtn" 
+                                disabled
+                                aria-label="发送消息"
+                                title="发送消息 (Enter)"
+                            >
+                                <span class="btn-icon">📤</span>
+                    </button>
+                            <button 
+                                class="btn record-btn" 
+                                id="recordBtn"
+                                aria-label="开始录音"
+                                title="录音 (空格键)"
+                            >
+                                <span class="btn-icon">🎤</span>
+                    </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 快捷键帮助 -->
+        <div class="card" style="margin-top: 20px; background: rgba(255,255,255,0.95); padding: 20px;">
+            <details>
+                <summary style="cursor: pointer; color: #667eea; font-weight: 600;">💡 快捷键帮助</summary>
+                <div style="margin-top: 15px; color: #666; line-height: 1.8;">
+                    <ul style="margin: 10px 0 0 20px;">
+                        <li><strong>Enter:</strong> 发送消息</li>
+                        <li><strong>Shift + Enter:</strong> 换行</li>
+                        <li><strong>空格键:</strong> 开始/停止录音（输入框未聚焦时）</li>
+                        <li><strong>ESC:</strong> 停止录音</li>
+                    </ul>
+                </div>
+            </details>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="/static/js/common.js"></script>
+    <script src="/static/js/chat.js"></script>
+    
+    <!-- 无障碍和用户体验增强 -->
+    <script>
+        // 页面可见性API，处理标签页切换
+        document.addEventListener('visibilitychange', function() {
+            if (document.hidden && window.chatPage && window.chatPage.currentAudio) {
+                // 页面隐藏时暂停音频
+                window.chatPage.currentAudio.pause();
+            }
+        });
+        
+        // 网络状态监听
+        window.addEventListener('online', function() {
+            console.log('网络连接已恢复');
+        });
+        
+        window.addEventListener('offline', function() {
+            console.log('网络连接已断开');
+            if (window.chatPage) {
+                window.chatPage.addMessage('网络连接已断开，请检查网络设置。', 'ai', true);
+            }
+        });
+        
+        // 添加键盘导航支持
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Tab') {
+                document.body.classList.add('keyboard-navigation');
+            }
+        });
+        
+        document.addEventListener('mousedown', function() {
+            document.body.classList.remove('keyboard-navigation');
+        });
+    </script>
+    
+    <style>
+        /* 键盘导航时的焦点样式 */
+        .keyboard-navigation *:focus {
+            outline: 3px solid #667eea;
+            outline-offset: 2px;
+        }
+        
+        /* 错误消息样式 */
+        .error-message {
+            background: rgba(231, 76, 60, 0.1);
+            border-left: 4px solid #e74c3c;
+        }
+        
+        /* 视频占位符增强 */
+        .video-placeholder {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            text-align: center;
+            z-index: 3;
+            opacity: 0.8;
+        }
+        
+        /* 隐藏视频时显示占位符 */
+        #avatarVideo:not([src]) + .video-placeholder,
+        #avatarVideo[src=""] + .video-placeholder {
+            display: block;
+        }
+        
+        #avatarVideo[src]:not([src=""]) + .video-placeholder {
+            display: none;
+        }
+        
+        /* 消息输入框自动调整高度 */
+        .message-input {
+            resize: none;
+            overflow: hidden;
+            transition: height 0.2s ease;
+        }
+        
+        /* 录音状态下的视觉反馈 */
+        .recording-active .chat-layout {
+            border: 2px solid #e74c3c;
+            border-radius: 25px;
+            background: rgba(231, 76, 60, 0.02);
+        }
+        
+        /* 音频播放时的视觉指示 */
+        .audio-playing .video-container {
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.3);
+        }
+        
+        /* 消息发送中的视觉反馈 */
+        .sending-message .input-group {
+            opacity: 0.7;
+            pointer-events: none;
+        }
+        
+        /* 详情/摘要元素样式 */
+        details[open] summary {
+            margin-bottom: 15px;
+        }
+        
+        summary {
+            outline: none;
+            font-size: 1rem;
+        }
+        
+        summary:hover {
+            color: #3a76d8;
+        }
+        
+        /* 响应式优化 */
+        @media (max-width: 480px) {
+            .chat-layout {
+                gap: 15px;
+            }
+            
+            .chat-header {
+                padding: 15px 20px;
+            }
+            
+            .chat-title {
+                font-size: 1.1rem;
+            }
+            
+            .chat-subtitle {
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+</body>
+</html>
