@@ -1,11 +1,11 @@
 {
   "alibaba_cloud": {
-    "access_key_id": "LTAI5tMfFdf67ZmuXEpGU98K",
-    "access_key_secret": "LdLwOBEFyv1umbQa6wetv8imh2N87z",
+    "access_key_id": "LTAI5tM****67ZmuXEpGU98K",
+    "access_key_secret": "LdLw*********bQa6wetv8imh2N87z",
     "region": "cn-shanghai"
   },
   "dashscope": {
-    "api_key": "sk-5b1e7eaf36844743ba93ee0086771c00"
+    "api_key": "sk-5b1e7e**3ba93ee0086771c00"
   },
-  "appkey": "m3ORtIhiw88s27c0"
+  "appkey": "m3ORt*******s27c0"
 }
